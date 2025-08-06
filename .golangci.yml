@@ -54,6 +54,7 @@ linters:
             - '!$test'
           allow:
             - $gostd
+            - golang.org/x/example
         Test:
           files:
             - $test
