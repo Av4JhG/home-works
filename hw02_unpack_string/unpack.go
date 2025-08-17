@@ -13,9 +13,7 @@ func Unpack(s string) (string, error) {
 	var s2 string
 	var n int
 	var backslash bool
-
 	for i, item := range sr {
-
 		// если первый символ в строке цифра
 		if unicode.IsDigit(item) && i == 0 {
 			return "", ErrInvalidString
