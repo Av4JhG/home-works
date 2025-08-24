@@ -7,7 +7,6 @@ import (
 
 // Top10 returns 10 most used words in form of slice.
 func Top10(text string) []string {
-
 	// Нормализуем текст.
 	normalText := normalizeText(text)
 	// Преобразовываем строку в слайс.
