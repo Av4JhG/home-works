@@ -9,6 +9,12 @@ import (
 // Change to true if needed.
 var taskWithAsteriskIsCompleted = false
 
+var textForNormalize = `
+								Как    видите, 
+	он   спускается по    лестнице вслед 
+			за своим    другом Кристофером Робином, 
+										головой    вниз           `
+
 var text = `Как видите, он  спускается  по  лестнице  вслед  за  своим
 	другом   Кристофером   Робином,   головой   вниз,  пересчитывая
 	ступеньки собственным затылком:  бум-бум-бум.  Другого  способа
@@ -46,6 +52,18 @@ var text = `Как видите, он  спускается  по  лестни�
 func TestTop10(t *testing.T) {
 	t.Run("no words in empty string", func(t *testing.T) {
 		require.Len(t, Top10(""), 0)
+	})
+
+	t.Run("1 word test", func(t *testing.T) {
+		expected := []string{
+			"тест",
+		}
+		require.Equal(t, expected, Top10("тест"))
+	})
+
+	t.Run("test sanitaze text", func(t *testing.T) {
+		expected := `Как видите, он спускается по лестнице вслед за своим другом Кристофером Робином, головой вниз`
+		require.Equal(t, expected, normalizeText(textForNormalize))
 	})
 
 	t.Run("positive test", func(t *testing.T) {
