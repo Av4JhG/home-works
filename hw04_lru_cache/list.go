@@ -11,14 +11,14 @@ type List interface {
 	MoveToFront(i *ListItem)           // переместить элемент в начало.
 }
 
-// Структура элемента списка
+// Структура элемента списка.
 type ListItem struct {
 	Value interface{} // значение элемента списка.
 	Next  *ListItem   // предыдущий элемент списка.
 	Prev  *ListItem   // следующий элемент списка.
 }
 
-// Структура списка
+// Структура списка.
 type list struct {
 	len   int       // длина списка.
 	front *ListItem // первый элемент списка.
@@ -104,7 +104,7 @@ func (l *list) MoveToFront(i *ListItem) {
 	l.len++
 }
 
-// Функция инициализации списка (конструктор)
+// Функция инициализации списка (конструктор).
 func NewList() List {
 	return new(list)
 }

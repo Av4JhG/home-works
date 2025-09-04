@@ -2,7 +2,7 @@ package hw04lrucache
 
 type Key string
 
-// Интерфейс для работы с кэшем
+// Интерфейс для работы с кэшем.
 type Cache interface {
 	Set(key Key, value interface{}) bool // добавить значение в кэш по ключу.
 	Get(key Key) (interface{}, bool)     // получить значение из кэша по ключу.
@@ -17,8 +17,8 @@ type cacheItem struct {
 
 // Структура LRU кэша.
 type lruCache struct {
-	capacity int               // емкость кэша
-	queue    List              // очередь
+	capacity int               // емкость кэша.
+	queue    List              // очередь.
 	items    map[Key]*ListItem // мап элементов кэша.
 }
 
@@ -34,7 +34,6 @@ func newCacheItem(key Key, value interface{}) *cacheItem {
 
 // Реализация добавления элемента в кэш.
 func (l *lruCache) Set(key Key, value interface{}) bool {
-
 	item, ok := l.items[key]
 
 	if ok {
@@ -57,7 +56,6 @@ func (l *lruCache) Set(key Key, value interface{}) bool {
 
 // Реализация получения элемента из кэша.
 func (l *lruCache) Get(key Key) (interface{}, bool) {
-
 	item, ok := l.items[key]
 
 	if ok {
@@ -70,14 +68,13 @@ func (l *lruCache) Get(key Key) (interface{}, bool) {
 
 // Реализация очистки кэша.
 func (l *lruCache) Clear() {
-
 	for l.queue.Len() > 0 {
 		l.queue.Remove(l.queue.Back())
 	}
 	l.items = make(map[Key]*ListItem, l.capacity)
 }
 
-// Функция инициализации кэша (конструктор)
+// Функция инициализации кэша (конструктор).
 func NewCache(capacity int) Cache {
 	return &lruCache{
 		capacity: capacity,
