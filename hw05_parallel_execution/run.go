@@ -38,7 +38,7 @@ func Run(tasks []Task, n, m int) error {
 	return nil
 }
 
-// Функция обработки тасок
+// Функция обработки тасок.
 func worker(wg *sync.WaitGroup, done <-chan interface{}, resultChan chan<- error, taskChan <-chan Task) {
 	defer wg.Done()
 
