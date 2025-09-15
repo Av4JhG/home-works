@@ -24,6 +24,7 @@ func workStage(done In, in In) Out {
 		defer func() {
 			close(out)
 			for range in {
+				<-in
 			}
 		}()
 
