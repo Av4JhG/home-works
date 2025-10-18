@@ -74,7 +74,7 @@ func TestValidate(t *testing.T) {
 				Version: "12323232323",
 			},
 			expectedErr: fmt.Errorf(
-				"field: Version | err: ошибка превышения длины строки\n",
+				"field: Version | err: ошибка превышения длины строки\n", //nolint:revive
 			),
 		},
 		{
@@ -82,7 +82,7 @@ func TestValidate(t *testing.T) {
 				Version: "sasha",
 			},
 			expectedErr: fmt.Errorf(
-				"field: Version | err: строка не соответствует регулярному выражению\n",
+				"field: Version | err: строка не соответствует регулярному выражению\n", //nolint:revive
 			),
 		},
 		{
@@ -90,7 +90,7 @@ func TestValidate(t *testing.T) {
 				Version: "123123dasda",
 			},
 			expectedErr: fmt.Errorf(
-				"field: Version | err: ошибка превышения длины строки\n",
+				"field: Version | err: ошибка превышения длины строки\n", //nolint:revive
 			),
 		},
 		{
