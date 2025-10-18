@@ -113,7 +113,7 @@ func TestValidate(t *testing.T) {
 				Code: 503,
 			},
 			expectedErr: fmt.Errorf(
-				"field: Code | err: число не входит в указанное множество\n"),
+				"field: Code | err: число не входит в указанное множество\n"), //nolint:revive
 		},
 		{
 			in: Response{
