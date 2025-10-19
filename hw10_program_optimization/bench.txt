@@ -1,0 +1,55 @@
+0. Исходная производительность
+=== RUN   TestGetDomainStat_Time_And_Memory
+    stats_optimization_test.go:46: time used: 419.904573ms / 300ms
+    stats_optimization_test.go:47: memory used: 328Mb / 30Mb
+    stats_optimization_test.go:49: 
+                Error Trace:    stats_optimization_test.go:49
+                Error:          "419904573" is not less than "300000000"
+                Test:           TestGetDomainStat_Time_And_Memory
+                Messages:       the program is too slow
+--- FAIL: TestGetDomainStat_Time_And_Memory (9.35s)
+FAIL
+FAIL    github.com/fAv4JhG/home-works/hw10_program_optimization 9.355s
+FAIL
+
+1. Использование easyjson
+=== RUN   TestGetDomainStat_Time_And_Memory
+    stats_optimization_test.go:46: time used: 290.493166ms / 300ms
+    stats_optimization_test.go:47: memory used: 296Mb / 30Mb
+    stats_optimization_test.go:50: 
+                Error Trace:    stats_optimization_test.go:50
+                Error:          "311035320" is not less than "31457280"
+                Test:           TestGetDomainStat_Time_And_Memory
+                Messages:       the program is too greedy
+--- FAIL: TestGetDomainStat_Time_And_Memory (5.02s)
+FAIL
+FAIL    github.com/fAv4JhG/home-works/hw10_program_optimization 5.028s
+FAIL
+
+2. Добавляем к easyjson еще и bufio
+=== RUN   TestGetDomainStat_Time_And_Memory
+    stats_optimization_test.go:46: time used: 242.194218ms / 300ms
+    stats_optimization_test.go:47: memory used: 163Mb / 30Mb
+    stats_optimization_test.go:50: 
+                Error Trace:    /home/pc326/Development/HW/home-works/hw10_program_optimization/stats_optimization_test.go:50
+                Error:          "171388080" is not less than "31457280"
+                Test:           TestGetDomainStat_Time_And_Memory
+                Messages:       the program is too greedy
+--- FAIL: TestGetDomainStat_Time_And_Memory (3.72s)
+FAIL
+FAIL    github.com/fAv4JhG/home-works/hw10_program_optimization 3.727s
+FAIL
+
+3. Пре-компиляция регулярки
+=== RUN   TestGetDomainStat_Time_And_Memory
+    stats_optimization_test.go:46: time used: 136.226463ms / 300ms
+    stats_optimization_test.go:47: memory used: 33Mb / 30Mb
+    stats_optimization_test.go:50: 
+                Error Trace:    /home/pc326/Development/HW/home-works/hw10_program_optimization/stats_optimization_test.go:50
+                Error:          "34816072" is not less than "31457280"
+                Test:           TestGetDomainStat_Time_And_Memory
+                Messages:       the program is too greedy
+--- FAIL: TestGetDomainStat_Time_And_Memory (1.54s)
+FAIL
+FAIL    github.com/fAv4JhG/home-works/hw10_program_optimization 1.546s
+FAIL
