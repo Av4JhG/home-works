@@ -50,6 +50,38 @@ func TestGetDomainStat_Time_And_Memory(t *testing.T) {
 	require.Less(t, mem, memoryLimit, "the program is too greedy")
 }
 
+func TestGetDomainStat_Time_And_Memory_New_Rule(t *testing.T) {
+	bench := func(b *testing.B) {
+		b.Helper()
+		b.StopTimer()
+
+		r, err := zip.OpenReader("testdata/users.dat.zip")
+		require.NoError(t, err)
+		defer r.Close()
+
+		require.Equal(t, 1, len(r.File))
+
+		data, err := r.File[0].Open()
+		require.NoError(t, err)
+
+		b.StartTimer()
+		// single difference: "com" instead of "biz"
+		stat, err := GetDomainStat(data, "com")
+		b.StopTimer()
+		require.NoError(t, err)
+
+		require.Equal(t, 383, len(stat))
+	}
+
+	result := testing.Benchmark(bench)
+	mem := result.MemBytes
+	t.Logf("time used: %s / %s", result.T, timeLimit)
+	t.Logf("memory used: %dMb / %dMb", mem/mb, memoryLimit/mb)
+
+	require.Less(t, int64(result.T), int64(timeLimit), "the program is too slow")
+	require.Less(t, mem, memoryLimit, "the program is too greedy")
+}
+
 var expectedBizStat = DomainStat{
 	"abata.biz":         25,
 	"abatz.biz":         25,
