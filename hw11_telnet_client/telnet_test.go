@@ -62,4 +62,35 @@ func TestTelnetClient(t *testing.T) {
 
 		wg.Wait()
 	})
+
+	t.Run("no server", func(t *testing.T) {
+		client := NewTelnetClient(
+			"localhost:4242",
+			time.Second*10,
+			io.NopCloser(&bytes.Buffer{}),
+			&bytes.Buffer{},
+		)
+
+		err := client.Connect()
+
+		require.Error(t, err)
+	})
+
+	t.Run("incorrect usage", func(t *testing.T) {
+		client := NewTelnetClient(
+			"localhost:4242",
+			time.Second*10,
+			io.NopCloser(&bytes.Buffer{}),
+			&bytes.Buffer{},
+		)
+
+		sendErr := client.Send()
+		require.ErrorIs(t, sendErr, ErrNotConnected)
+
+		receiveErr := client.Receive()
+		require.ErrorIs(t, receiveErr, ErrNotConnected)
+
+		closeErr := client.Close()
+		require.ErrorIs(t, closeErr, ErrNotConnected)
+	})
 }
