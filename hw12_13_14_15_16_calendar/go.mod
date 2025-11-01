@@ -2,8 +2,6 @@ module github.com/fAv4JhG/home-works/hw12_13_14_15_calendar
 
 go 1.23.0
 
-toolchain go1.24.1
-
 require github.com/spf13/viper v1.21.0
 
 require (
