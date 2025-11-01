@@ -1,5 +1,18 @@
-[logger]
-level = "INFO"
+server:
+  host: "localhost"
+  port: 8050
 
-# TODO
-# ...
+database:
+  user: "postgres"
+  password: "postgres"
+  name: "postgres"
+  host: "localhost"
+  port: 5432
+  ssl: "disable"
+
+logger:
+  level: "info"
+  file: "app.log"
+
+storage:
+  type: "memory"
