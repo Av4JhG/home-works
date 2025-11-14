@@ -18,7 +18,7 @@ type Storage interface {
 	Close(ctx context.Context) error
 	CreateEvent(ctx context.Context, e domain.Event) error
 	UpdateEvent(ctx context.Context, e domain.Event) error
-	DeleteEvent(ctx context.Context, e domain.Event) error
+	DeleteEvent(ctx context.Context, id int64) error
 	EventList(ctx context.Context) ([]domain.Event, error)
 }
 
@@ -38,8 +38,8 @@ func (a *App) UpdateEvent(ctx context.Context, e domain.Event) error {
 	return nil
 }
 
-func (a *App) DeleteEvent(ctx context.Context, e domain.Event) error {
-	a.storage.DeleteEvent(ctx, e)
+func (a *App) DeleteEvent(ctx context.Context, id int64) error {
+	a.storage.DeleteEvent(ctx, id)
 	return nil
 }
 

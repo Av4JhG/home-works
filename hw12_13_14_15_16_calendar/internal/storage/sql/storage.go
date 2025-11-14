@@ -78,10 +78,10 @@ func (s *Storage) UpdateEvent(ctx context.Context, event domain.Event) error {
 	return nil
 }
 
-func (s *Storage) DeleteEvent(ctx context.Context, event domain.Event) error {
+func (s *Storage) DeleteEvent(ctx context.Context, id int64) error {
 	sql := `DELETE FROM events WHERE id = $1`
 
-	_, err := s.conn.Exec(ctx, sql, event.ID)
+	_, err := s.conn.Exec(ctx, sql, id)
 	if err != nil {
 		log.Fatal("failed to delete event:", err)
 	}

@@ -42,4 +42,10 @@ create-migration:
 migrate:
 	docker run --rm -v ./migrations:/app/migrations $(BUILDER) -database $(POSTGRES) -path /app/migrations up
 
-.PHONY: build run build-img run-img version test lint
+generate:
+	"C:\protoc\bin\protoc.exe" \
+	--go_out=calendar/pb \
+	--go-grpc_out=calendar/pb \
+	api/*.proto
+
+.PHONY: build run build-img run-img version test lint create-migration migrate generate
