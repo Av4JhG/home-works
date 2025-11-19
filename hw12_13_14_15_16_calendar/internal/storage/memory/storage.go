@@ -45,8 +45,8 @@ func (s *Storage) UpdateEvent(_ context.Context, event domain.Event) error {
 	return nil
 }
 
-func (s *Storage) DeleteEvent(_ context.Context, event domain.Event) error {
-	delete(s.events, strconv.Itoa(int(event.ID)))
+func (s *Storage) DeleteEvent(_ context.Context, id int64) error {
+	delete(s.events, strconv.Itoa(int(id)))
 	return nil
 }
 

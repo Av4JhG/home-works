@@ -4,30 +4,22 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"os"
+	"net"
 	"os/signal"
+	"sync"
 	"syscall"
-	"time"
 
+	pb "github.com/fAv4JhG/home-works/hw12_13_14_15_calendar/calendar/pb"
 	"github.com/fAv4JhG/home-works/hw12_13_14_15_calendar/internal/app"
 	"github.com/fAv4JhG/home-works/hw12_13_14_15_calendar/internal/logger"
-	domain "github.com/fAv4JhG/home-works/hw12_13_14_15_calendar/internal/model"
+	internalgrpc "github.com/fAv4JhG/home-works/hw12_13_14_15_calendar/internal/server/grpc"
 	internalhttp "github.com/fAv4JhG/home-works/hw12_13_14_15_calendar/internal/server/http"
 	memorystorage "github.com/fAv4JhG/home-works/hw12_13_14_15_calendar/internal/storage/memory"
 	sqlstorage "github.com/fAv4JhG/home-works/hw12_13_14_15_calendar/internal/storage/sql"
+	"google.golang.org/grpc"
 )
 
 var configFile string
-
-var testEvent = domain.Event{
-	ID:          1,
-	Title:       "Morning Jog",
-	Date:        time.Date(2025, time.January, 8, 6, 0, 0, 0, time.UTC),
-	Duration:    time.Hour * 1,
-	Description: "A refreshing morning jog through the park.",
-	UserID:      12345,
-	TimeShift:   15,
-}
 
 func init() {
 	flag.StringVar(&configFile, "config", "../../configs/config.yaml", "Path to configuration file")
@@ -66,36 +58,55 @@ func main() {
 	}
 
 	calendar := app.New(logg, storage)
-	server := internalhttp.NewServer(logg, calendar, config.Server.DSN())
 
-	calendar.CreateEvent(ctx, testEvent)
-	calendar.CreateEvent(ctx, testEvent)
-	calendar.CreateEvent(ctx, testEvent)
-	calendar.CreateEvent(ctx, testEvent)
-	calendar.CreateEvent(ctx, testEvent)
+	httpServer := internalhttp.NewServer(logg, calendar, storage, config.Server.DSN())
+	grpcServer := grpc.NewServer(
+		grpc.UnaryInterceptor(internalgrpc.UnaryLoggingInterceptor(logg)),
+	)
+	pb.RegisterEventsServer(grpcServer, internalgrpc.NewServer(logg, calendar, storage))
 
-	fmt.Println(calendar.EventList(ctx))
+	var wg sync.WaitGroup
+	wg.Add(2)
+
+	go func() {
+		defer wg.Done()
+		startHTTPServer(ctx, httpServer, logg)
+	}()
+
+	go func() {
+		defer wg.Done()
+		startGRPCServer(ctx, grpcServer, logg)
+	}()
+
+	wg.Wait()
+	logg.Info("calendar is running...")
+}
+
+func startHTTPServer(ctx context.Context, server *internalhttp.Server, logger *logger.Logger) error {
+	go func() {
+		<-ctx.Done()
+		if err := server.Stop(ctx); err != nil {
+			logger.Error("failed to stop http server: " + err.Error())
+		}
+		logger.Error("server stopped")
+	}()
+
+	logger.Println("http server started: ", server.Addr)
+	return server.Start(ctx)
+}
+
+func startGRPCServer(ctx context.Context, server *grpc.Server, logger *logger.Logger) error {
+	listener, err := net.Listen("tcp", "127.0.0.1:50051")
+	if err != nil {
+		return fmt.Errorf("failed to start grpc server: %w", err)
+	}
 
 	go func() {
 		<-ctx.Done()
-
-		ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
-		defer cancel()
-
-		if err := server.Stop(ctx); err != nil {
-			logg.Error("failed to stop http server: " + err.Error())
-		}
+		server.GracefulStop()
+		logger.Error("server stopped")
 	}()
 
-	logg.Info("calendar is running...")
-	// logg.Info("Это INFO сообщение")
-	// logg.Warn("Это WARN сообщение")
-	// logg.Error("Это ERROR сообщение")
-	// logg.Fatal("Это FATAL сообщение")
-
-	if err := server.Start(ctx); err != nil {
-		logg.Error("failed to start http server: " + err.Error())
-		cancel()
-		os.Exit(1) //nolint:gocritic
-	}
+	logger.Println("grpc server started :50051")
+	return server.Serve(listener)
 }
