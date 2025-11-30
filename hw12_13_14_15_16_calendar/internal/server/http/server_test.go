@@ -18,6 +18,11 @@ type MockStorage struct {
 	mock.Mock
 }
 
+func (m *MockStorage) ClearEvents(ctx context.Context, _ string) error {
+	args := m.Called(ctx)
+	return args.Error(0)
+}
+
 func (m *MockStorage) EventList(ctx context.Context) ([]domain.Event, error) {
 	args := m.Called(ctx)
 	return args.Get(0).([]domain.Event), args.Error(1)
