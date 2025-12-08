@@ -60,3 +60,8 @@ func (s *Storage) EventList(_ context.Context) ([]domain.Event, error) {
 	s.mu.Unlock()
 	return list, nil
 }
+
+func (s *Storage) ClearEvents(_ context.Context, _ string) error {
+	// TODO
+	return nil
+}

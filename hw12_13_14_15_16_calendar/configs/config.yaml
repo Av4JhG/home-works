@@ -16,3 +16,12 @@ logger:
 
 storage:
   type: "memory"
+
+rabbit:
+  port: 5672
+  user: "admin"
+  password: "admin"
+    
+scheduler:
+  interval: 10
+  life: '1 year'

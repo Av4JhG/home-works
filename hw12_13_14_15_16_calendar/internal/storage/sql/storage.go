@@ -112,3 +112,13 @@ func (s *Storage) EventList(ctx context.Context) ([]domain.Event, error) {
 	}
 	return list, nil
 }
+
+func (s *Storage) ClearEvents(ctx context.Context, life string) error {
+	sql := fmt.Sprintf("DELETE FROM events WHERE date < NOW() - INTERVAL '%s'", life)
+
+	_, err := s.conn.Exec(ctx, sql)
+	if err != nil {
+		log.Fatal("failed to delete event:", err)
+	}
+	return nil
+}

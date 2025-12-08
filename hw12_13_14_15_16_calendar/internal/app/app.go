@@ -20,6 +20,7 @@ type Storage interface {
 	UpdateEvent(ctx context.Context, e domain.Event) error
 	DeleteEvent(ctx context.Context, id int64) error
 	EventList(ctx context.Context) ([]domain.Event, error)
+	ClearEvents(ctx context.Context, life string) error
 }
 
 func New(logger Logger, storage Storage) *App {

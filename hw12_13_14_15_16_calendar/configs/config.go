@@ -1,16 +1,19 @@
-package main
+package config
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/spf13/viper"
 )
 
 type Config struct {
-	Logger   LoggerConf
-	Database DatabaseConf
-	Server   ServerConf
-	Storage  StorageConf
+	Logger    LoggerConf
+	Database  DatabaseConf
+	Server    ServerConf
+	Storage   StorageConf
+	Rabbit    RabbitConf
+	Scheduler SchedulerConf
 }
 
 type LoggerConf struct {
@@ -36,6 +39,16 @@ type StorageConf struct {
 	Type string
 }
 
+type RabbitConf struct {
+	Port     string
+	User     string
+	Password string
+}
+type SchedulerConf struct {
+	Interval time.Duration
+	Life     string
+}
+
 func NewConfig(configFile string) (*Config, error) {
 	viper.SetConfigFile(configFile)
 	if err := viper.ReadInConfig(); err != nil {
@@ -57,4 +70,9 @@ func (d *DatabaseConf) DSN() string {
 
 func (s *ServerConf) DSN() string {
 	return fmt.Sprintf("%s:%s", s.Host, s.Port)
+}
+
+func (r *RabbitConf) DSN() string {
+	return fmt.Sprintf("amqp://%s:%s@localhost:%s",
+		r.User, r.Password, r.Port)
 }

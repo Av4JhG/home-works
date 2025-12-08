@@ -11,3 +11,9 @@ type Event struct {
 	UserID      int64         `db:"user_id"`     // ID пользователя, владельца события;
 	TimeShift   int64         `db:"timeshift"`   // За сколько времени высылать уведомление, опционально.
 }
+
+type Notification struct {
+	EventID int64
+	Title   string
+	Time    string
+}
