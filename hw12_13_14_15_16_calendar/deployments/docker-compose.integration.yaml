@@ -1,0 +1,62 @@
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres-container
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ../data:/var/lib/postgresql/data
+    networks:
+      - hw
+
+  rabbitmq:
+    image: rabbitmq:3.12-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672" # http://localhost:15672/#/
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    restart: unless-stopped
+    networks:
+      - hw
+
+  calendar:
+    build:
+      context: .
+      dockerfile: ./dockerfile.calendar
+    container_name: calendar
+    depends_on:
+      - postgres
+      - rabbitmq
+    ports:
+      - "8888:8888"
+      - "50051:50051"
+    networks:
+      - hw
+
+  integration-tests:
+    build:
+      context: .
+      dockerfile: ./dockerfile.integration
+    container_name: integration-tests
+    depends_on:
+      - calendar
+      - postgres
+      - rabbitmq
+    networks:
+      - hw
+
+volumes:
+  rabbitmq_data:
+  postgres_data:
+
+networks:
+  hw:
+    driver: bridge

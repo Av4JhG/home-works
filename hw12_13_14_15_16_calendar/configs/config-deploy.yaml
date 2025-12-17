@@ -1,0 +1,28 @@
+server:
+  host: "0.0.0.0"
+  port: 8888
+
+database:
+  user: "postgres"
+  password: "postgres"
+  name: "postgres"
+  host: "postgres-container"
+  port: 5432
+  ssl: "disable"
+
+logger:
+  level: "info"
+  file: "app.log"
+
+storage:
+  type: "postgres"
+  
+rabbit:
+  host: "rabbitmq"
+  port: 5672
+  user: "admin"
+  password: "admin"
+    
+scheduler:
+  interval: 10
+  life: '1 year'

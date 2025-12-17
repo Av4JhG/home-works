@@ -1,0 +1,14 @@
+FROM golang:1.23-alpine3.20 AS builder
+
+RUN apk update && apk add --no-cache \
+    git \
+    bash \
+    curl \
+    && rm -rf /var/cache/apk/*
+
+RUN curl -L https://github.com/golang-migrate/migrate/releases/download/v4.15.1/migrate.linux-amd64.tar.gz | tar xvz -C /usr/local/bin
+
+WORKDIR /app
+COPY . .
+ENTRYPOINT ["migrate"]
+CMD ["-version"]

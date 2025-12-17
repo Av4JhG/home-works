@@ -1,0 +1,17 @@
+FROM golang:1.23-alpine3.20 AS builder
+
+# RUN apk update && apk add --no-cache git
+
+WORKDIR /app
+COPY . .
+
+RUN GOOS=linux CGO_ENABLED=0 go build -ldflags="-w -s" -o /go/bin/calendar_sender ./cmd/sender
+
+FROM alpine:latest
+
+WORKDIR /app
+
+COPY --from=builder /go/bin/calendar_sender /app/sender
+COPY --from=builder /app/configs/config-deploy.yaml .
+
+CMD ["/app/sender","--config","config-deploy.yaml","run"]
