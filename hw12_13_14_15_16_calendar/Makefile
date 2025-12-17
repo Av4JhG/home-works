@@ -13,10 +13,7 @@ build:
 	go build -v -o ./bin/calendar_sender -ldflags "$(LDFLAGS)" ./cmd/sender
 
 
-run: build
-	./bin/calendar -config ./configs/config.yaml
-	./bin/calendar_scheduler -config ./configs/config.yaml
-	./bin/calendar_sender -config ./configs/config.yaml
+run: up
 
 build-img:
 	docker build \
@@ -51,4 +48,15 @@ generate:
 	--go-grpc_out=calendar/pb \
 	api/*.proto
 
-.PHONY: build run build-img run-img version test lint create-migration migrate generate
+up:
+	docker-compose up --build -d
+
+down:
+	docker-compose down
+
+integration-tests:
+	docker-compose -f docker-compose.integration.yaml up --abort-on-container-exit --exit-code-from integration-tests
+	docker-compose -f docker-compose.integration.yaml down
+
+
+.PHONY: build run build-img run-img version test lint create-migration migrate generate up down integration-tests

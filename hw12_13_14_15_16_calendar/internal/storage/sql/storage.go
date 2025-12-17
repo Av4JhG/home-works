@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"strings"
 
 	domain "github.com/fAv4JhG/home-works/hw12_13_14_15_calendar/internal/model"
 	"github.com/jackc/pgx/v4"
@@ -23,6 +24,7 @@ func New(dsn string) *Storage {
 
 func (s *Storage) Connect(ctx context.Context) error {
 	conn, err := pgx.Connect(ctx, s.dsn)
+	fmt.Println(s.dsn)
 	if err != nil {
 		return err
 	}
@@ -88,9 +90,19 @@ func (s *Storage) DeleteEvent(ctx context.Context, id int64) error {
 	return nil
 }
 
-func (s *Storage) EventList(ctx context.Context) ([]domain.Event, error) {
+func (s *Storage) EventList(ctx context.Context, date string, listType string) ([]domain.Event, error) {
 	list := make([]domain.Event, 0)
-	rows, err := s.conn.Query(ctx, "SELECT id, user_id, title, date, duration, timeshift, description FROM events")
+
+	sqlQuery := "SELECT id, user_id, title, date, duration, timeshift, description FROM events "
+	switch strings.ToLower(listType) {
+	case "day":
+		sqlQuery += " WHERE date = $1"
+	case "week":
+		sqlQuery += " WHERE date >= $1 AND date < $1 + INTERVAL '7 days'"
+	case "month":
+		sqlQuery += " WHERE date >= $1 AND date < $1 + INTERVAL '1 month'"
+	}
+	rows, err := s.conn.Query(ctx, sqlQuery, date)
 	if err != nil {
 		return list, err
 	}

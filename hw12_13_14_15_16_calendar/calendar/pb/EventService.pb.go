@@ -26,6 +26,7 @@ const (
 type EventListRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Date          *timestamppb.Timestamp `protobuf:"bytes,1,opt,name=date,proto3" json:"date,omitempty"`
+	ListType      string                 `protobuf:"bytes,2,opt,name=listType,proto3" json:"listType,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -65,6 +66,13 @@ func (x *EventListRequest) GetDate() *timestamppb.Timestamp {
 		return x.Date
 	}
 	return nil
+}
+
+func (x *EventListRequest) GetListType() string {
+	if x != nil {
+		return x.ListType
+	}
+	return ""
 }
 
 type Event struct {
@@ -467,9 +475,10 @@ var File_api_EventService_proto protoreflect.FileDescriptor
 
 const file_api_EventService_proto_rawDesc = "" +
 	"\n" +
-	"\x16api/EventService.proto\x12\x05event\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1bgoogle/protobuf/empty.proto\"B\n" +
+	"\x16api/EventService.proto\x12\x05event\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1bgoogle/protobuf/empty.proto\"^\n" +
 	"\x10EventListRequest\x12.\n" +
-	"\x04date\x18\x01 \x01(\v2\x1a.google.protobuf.TimestampR\x04date\"\xef\x01\n" +
+	"\x04date\x18\x01 \x01(\v2\x1a.google.protobuf.TimestampR\x04date\x12\x1a\n" +
+	"\blistType\x18\x02 \x01(\tR\blistType\"\xef\x01\n" +
 	"\x05Event\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x14\n" +
 	"\x05title\x18\x02 \x01(\tR\x05title\x12.\n" +

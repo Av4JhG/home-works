@@ -1,6 +1,6 @@
 server:
   host: "localhost"
-  port: 8050
+  port: 8888
 
 database:
   user: "postgres"
@@ -15,9 +15,10 @@ logger:
   file: "app.log"
 
 storage:
-  type: "memory"
+  type: "postgres"
 
 rabbit:
+  host: "localhost"
   port: 5672
   user: "admin"
   password: "admin"

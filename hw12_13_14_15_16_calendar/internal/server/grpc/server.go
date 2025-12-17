@@ -36,7 +36,7 @@ func (s *Server) EventList(ctx context.Context, req *pb.EventListRequest) (*pb.E
 	defer s.mu.Unlock()
 
 	var results []*pb.Event
-	events, err := s.storage.EventList(ctx)
+	events, err := s.storage.EventList(ctx, req.GetDate().String(), req.GetListType())
 	if err != nil {
 		s.logg.Error("cannot get events")
 	}

@@ -28,7 +28,7 @@ func TestStorage(t *testing.T) {
 
 	t.Run("empty list", func(t *testing.T) {
 		storage := New()
-		list, err := storage.EventList(ctx)
+		list, err := storage.EventList(ctx, "", "")
 		require.ErrorIs(t, err, nil)
 
 		require.Equal(t, 0, len(list))
@@ -37,7 +37,7 @@ func TestStorage(t *testing.T) {
 	t.Run("not empty list", func(t *testing.T) {
 		storage := New()
 		storage.CreateEvent(ctx, testEvent)
-		list, err := storage.EventList(ctx)
+		list, err := storage.EventList(ctx, "", "")
 		require.ErrorIs(t, err, nil)
 
 		require.Equal(t, 1, len(list))

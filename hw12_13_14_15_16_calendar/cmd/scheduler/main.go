@@ -60,13 +60,14 @@ func main() {
 
 	var wg sync.WaitGroup
 	wg.Add(1)
+	logg.Info("Scheduler is ready")
 
 	go func() {
 		defer wg.Done()
 		for {
 			select {
 			case <-ctx.Done():
-				logg.Info("scheduler stopped")
+				logg.Info("Scheduler stopped")
 				return
 			default:
 				processEvents(ctx, rmq, queueName, logg, storage)
@@ -86,7 +87,7 @@ func processEvents(
 	logg *logger.Logger,
 	storage app.Storage,
 ) {
-	events, err := storage.EventList(ctx)
+	events, err := storage.EventList(ctx, "20250219", "day")
 	if err != nil {
 		logg.Error("Get events error: ", err)
 	}
