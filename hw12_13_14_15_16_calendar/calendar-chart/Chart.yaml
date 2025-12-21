@@ -1,0 +1,4 @@
+apiVersion: v2
+name: calendar
+description: A Helm chart for the Calendar app
+version: 0.1.0

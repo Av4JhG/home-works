@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-sender-api
+  labels:
+    app: sender-api
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: sender-api
+  template:
+    metadata:
+      labels:
+        app: sender-api
+    spec:
+      containers:
+        - name: sender-api
+          image: {{ .Values.sender.repository }}:{{ .Values.sender.tag }}
+          ports:
+            - containerPort: 8888
+          env:
+            - name: RABBITMQ_URL
+              value: {{ .Values.env.RABBITMQ_URL }}
+            - name: POSTGRES_URL
+              value: {{ .Values.env.POSTGRES_URL }}
