@@ -1,0 +1,17 @@
+FROM golang:1.23-alpine3.20 AS builder
+
+WORKDIR /app
+COPY . .
+
+RUN GOOS=linux CGO_ENABLED=0 go build -ldflags="-w -s" -o /go/bin/calendar ./cmd/calendar
+
+FROM alpine:latest
+
+WORKDIR /app
+
+COPY --from=builder /go/bin/calendar /app/calendar
+COPY --from=builder /app/configs/config-deploy.yaml .
+
+EXPOSE 8888
+
+CMD ["/app/calendar","--config","config-deploy.yaml","run"]

@@ -50,7 +50,7 @@ func (s *Storage) DeleteEvent(_ context.Context, id int64) error {
 	return nil
 }
 
-func (s *Storage) EventList(_ context.Context) ([]domain.Event, error) {
+func (s *Storage) EventList(_ context.Context, _ string, _ string) ([]domain.Event, error) {
 	list := make([]domain.Event, 0, len(s.events))
 	s.mu.Lock()
 	for _, v := range s.events {

@@ -69,19 +69,25 @@ func (s *Server) Stop(_ context.Context) error {
 }
 
 func (s *Server) GetEventList(w http.ResponseWriter, r *http.Request) {
-	// dateQuery := r.URL.Query().Get("date")
-	// if dateQuery == "" {
-	// 	http.Error(w, "Missing date parameter", http.StatusBadRequest)
-	// 	return
-	// }
+	dateQuery := r.URL.Query().Get("date")
+	if dateQuery == "" {
+		http.Error(w, "Missing date parameter", http.StatusBadRequest)
+		return
+	}
 
-	// date, err := time.Parse("2006-01-02", dateQuery)
+	typeQuery := r.URL.Query().Get("listType")
+	if typeQuery == "" {
+		typeQuery = "day"
+	}
+
+	// date, err := ("20250219", dateQuery)
+	// date, err := time.Parse("20250219", dateQuery)
 	// if err != nil {
 	// 	http.Error(w, "Invalid date format", http.StatusBadRequest)
 	// 	return
 	// }
 
-	events, err := s.storage.EventList(r.Context())
+	events, err := s.storage.EventList(r.Context(), dateQuery, typeQuery)
 	if err != nil {
 		http.Error(w, "Error retrieving events", http.StatusInternalServerError)
 		return

@@ -40,6 +40,7 @@ type StorageConf struct {
 }
 
 type RabbitConf struct {
+	Host     string
 	Port     string
 	User     string
 	Password string
@@ -73,6 +74,6 @@ func (s *ServerConf) DSN() string {
 }
 
 func (r *RabbitConf) DSN() string {
-	return fmt.Sprintf("amqp://%s:%s@localhost:%s",
-		r.User, r.Password, r.Port)
+	return fmt.Sprintf("amqp://%s:%s@%s:%s",
+		r.User, r.Password, r.Host, r.Port)
 }

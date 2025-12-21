@@ -26,3 +26,5 @@ ehthumbs.db
 Thumbs.db
 .vscode/
 *.bak
+launch.json
+data/

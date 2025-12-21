@@ -36,7 +36,7 @@ func main() {
 
 	rmq, err := rmqclient.NewRabbitMQClient(config.Rabbit.DSN())
 	if err != nil {
-		logg.Fatal("Ошибка подключения к RabbitMQ: ", err)
+		logg.Fatal("Ошибка подключения к RabbitMQ :", err)
 	}
 	defer rmq.Close()
 

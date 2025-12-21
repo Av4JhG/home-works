@@ -41,50 +41,21 @@ services:
     networks:
       - hw
 
-  calendar_scheduler:
+  integration-tests:
     build:
       context: .
-      dockerfile: ./dockerfile.scheduler
-    container_name: calendar_scheduler
+      dockerfile: ./dockerfile.integration
+    container_name: integration-tests
     depends_on:
-      - rabbitmq
       - calendar
-    networks:
-      - hw
-
-  calendar_sender:
-    build:
-      context: .
-      dockerfile: ./dockerfile.sender
-    container_name: calendar_sender
-    depends_on:
+      - postgres
       - rabbitmq
-      - calendar_scheduler
     networks:
       - hw
-
-  migrations:
-    image: migrate/migrate
-    container_name: migrations
-    volumes:
-    - ./migrations:/migrations
-    entrypoint: ["/bin/sh", "-c"]
-    command: |
-      until pg_isready -h postgres -p 5432 -d postgres -U postgres --timeout=30; do
-      echo "Waiting for database..."
-      sleep 5
-      done
-      migrate -path=/migrations \
-      -database postgres://postgres:postgres@postgres:5432/postgres?sslmode=disable up
-    depends_on:
-    - postgres
-    networks:
-    - hw
 
 volumes:
   rabbitmq_data:
   postgres_data:
-
 
 networks:
   hw:

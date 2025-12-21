@@ -26,6 +26,14 @@ func init() {
 	flag.StringVar(&configFile, "config", "../../configs/config.yaml", "Path to configuration file")
 }
 
+// func logEvery10Seconds() {
+// 	for {
+// 		fmt.Println("Logging every 10 seconds...")
+// 		time.Sleep(10 * time.Second)
+// 	}
+// }
+
+// go run ./cmd/calendar/ -config ./configs/config.yaml.
 func main() {
 	flag.Parse()
 
@@ -52,7 +60,7 @@ func main() {
 		storage = sqlstorage.New(config.Database.DSN())
 		err = storage.Connect(ctx)
 		if err != nil {
-			logg.Error(err)
+			logg.Fatal(err)
 		}
 	case "memory":
 		storage = memorystorage.New()
@@ -78,6 +86,7 @@ func main() {
 		defer wg.Done()
 		startGRPCServer(ctx, grpcServer, logg)
 	}()
+	// go logEvery10Seconds()
 
 	wg.Wait()
 	logg.Info("calendar is running...")
