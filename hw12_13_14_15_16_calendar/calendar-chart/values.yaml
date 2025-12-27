@@ -1,0 +1,35 @@
+replicaCount: 1
+
+calendar:
+  repository: calendar
+  tag: v1.0.0
+  pullPolicy: IfNotPresent
+
+scheduler:
+  repository: scheduler
+  tag: v1.0.0
+  pullPolicy: IfNotPresent
+
+sender:
+  repository: sender
+  tag: v1.0.0
+  pullPolicy: IfNotPresent
+
+service:
+  name: calendar-api
+  type: ClusterIP
+  port: 80
+
+ingress:
+  name: calendar-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  rules:
+    - host: calendar.local
+      paths:
+        - path: /
+          pathType: Prefix
+
+env:
+  RABBITMQ_URL: "amqp://admin:admin@rabbitmq:5672/"
+  POSTGRES_URL: "postgres://postgres:postgres@postgres:5432/calendar"

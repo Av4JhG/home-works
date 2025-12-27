@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-scheduler-api
+  labels:
+    app: scheduler-api
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: scheduler-api
+  template:
+    metadata:
+      labels:
+        app: scheduler-api
+    spec:
+      containers:
+        - name: scheduler-api
+          image: {{ .Values.scheduler.repository }}:{{ .Values.scheduler.tag }}
+          ports:
+            - containerPort: 8888
+          env:
+            - name: RABBITMQ_URL
+              value: {{ .Values.env.RABBITMQ_URL }}
+            - name: POSTGRES_URL
+              value: {{ .Values.env.POSTGRES_URL }}
